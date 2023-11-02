@@ -1,84 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="mandelbrotSamG.css" id="css">
+<link rel="stylesheet" href="mandelbrot.css" id="css">
 
 <script id="vertex-shader" type="x-shader/x-vertex">
 
-attribute  vec4 vPosition;
+    attribute  vec4 vPosition;
 
-void main()
-{
-    gl_Position = vPosition;
-}
+    void main()
+    {
+        gl_Position = vPosition;
+    }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
 
-precision mediump float;
+    precision mediump float;
 
-uniform float cx;
-uniform float cy;
+    uniform float cx;
+    uniform float cy;
+    uniform int res;
+    uniform float scale;
 
-uniform float scale;
+    float height;
+    float width;
 
-float height;
-float width;
+    void main()
+    {
+        //float height = 0.5;          /* size of window in complex plane */
+        //float width = 0.5;
 
-void main()
-{
-     //float height = 0.5;          /* size of window in complex plane */
-     //float width = 0.5;
+        const int max = 1000;             /* number of interations per point */
+        const float PI = 3.14159;
 
-     const int max = 100;             /* number of interations per point */
-     const float PI = 3.14159;
+        float n = 1000.0;
+        float m = 1000.0;
+        float v;
 
-     float n = 1000.0;
-     float m = 1000.0;
-     float v;
+        float x = gl_FragCoord.x  /(n*scale) + cx - 1.0 / (1.5*scale);
+        float y = gl_FragCoord.y/(m*scale) + cy - 1.0 / (3.0*scale);
 
-     float x = gl_FragCoord.x  /(n*scale) + cx - 1.0 / (1.5*scale);
-     float y = gl_FragCoord.y/(m*scale) + cy - 1.0 / (3.0*scale);
-
-     float ax=0.0, ay=0.0;
-     float bx, by;
+        float ax=0.0, ay=0.0;
+        float bx, by;
 
 
-     for ( int k = 0; k < max; k++ ) {
+        for (int k = 0; k < max; k++) {
 
-          // compute c = c^2 + p
+            // compute c = c^2 + p
 
-              bx  = ax*ax-ay*ay;
-              by = 2.0*ax*ay;
-              ax = bx+x;
-              ay = by+y;
-              v = ax*ax+ay*ay;
+            bx  = ax*ax-ay*ay;
+            by = 2.0*ax*ay;
+            ax = bx+x;
+            ay = by+y;
+            v = ax*ax+ay*ay;
 
-              if ( v > 4.0 ) break;      /* assume not in set if mag > 2 */
-          }
+            if (v > 4.0) break;      /* assume not in set if mag > 2 */
+            if(k >= res) break;
+        }
 
-          // assign gray level to point based on its magnitude */
+        // assign gray level to point based on its magnitude */
 
-          if ( v > 1.0 ){
-              gl_FragColor = vec4(1.0-0.1*v,1.0-0.1*v,1.0-0.1*v,1.0);
-          } else {
-              v = min(v, 1.0);
-              gl_FragColor.r = v*0.5;
-              gl_FragColor.g = 0.5* sin( 3.0*PI*v) + 0.15;
-              gl_FragColor.b = 1.0-v;
-              gl_FragColor.b = 0.5* sin( 3.0*PI*v) + 0.05;
-              gl_FragColor.a = 1.0;
-           }
-}
+        if (v > 1.0){
+            gl_FragColor = vec4(1.0-0.1*v, 1.0-0.1*v, 1.0-0.1*v, 1.0);
+        } else {
+            v = min(v, 1.0);
+            gl_FragColor.r = v*0.5;
+            gl_FragColor.g = 0.5* sin(3.0*PI*v) + 0.15;
+            gl_FragColor.b = 1.0-v;
+            gl_FragColor.b = 0.5* sin(3.0*PI*v) + 0.05;
+            gl_FragColor.a = 1.0;
+        }
+    }
 </script>
 
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
 <script type="text/javascript" src="Common/initShaders.js"></script>
 <script type="text/javascript" src="Common/MV.js"></script>
-<script type="text/javascript" src="mandelbrotSamG.js"></script>
+<script type="text/javascript" src="mandelbrot.js"></script>
 
 <body>
 <canvas id="gl-canvas" width="1300" height="650">
-Oops ... your browser doesn't support the HTML5 canvas element
+    Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 <div class="info">
     SCROLL TO ZOOM      -       CLICK TO DRAG

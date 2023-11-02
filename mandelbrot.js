@@ -16,6 +16,7 @@ var prevX = 0.0;
 var prevY = 0.0;
 var currX = 0.0;
 var currY = 0.0;
+var resVal = -1;
 var program;
 
 //----------------------------------------------------------------------------
@@ -33,13 +34,13 @@ onload = function init() {
 
     var points = [
 
-    vec4(-1.0, -1.0, 0.0, 1.0),
-	vec4(-1.0, 1.0, 0.0, 1.0),
-	vec4(1.0, 1.0, 0.0, 1.0),
-    vec4(1.0, 1.0, 0.0, 1.0),
-	vec4(1.0, -1.0, 0.0, 1.0),
-    vec4(-1.0, -1.0, 0.0, 1.0)
-];
+        vec4(-1.0, -1.0, 0.0, 1.0),
+        vec4(-1.0, 1.0, 0.0, 1.0),
+        vec4(1.0, 1.0, 0.0, 1.0),
+        vec4(1.0, 1.0, 0.0, 1.0),
+        vec4(1.0, -1.0, 0.0, 1.0),
+        vec4(-1.0, -1.0, 0.0, 1.0)
+    ];
 
     // Load shaders and use the resulting shader program
 
@@ -61,6 +62,7 @@ onload = function init() {
     gl.uniform1f( gl.getUniformLocation(program, "scale"), scale);
     gl.uniform1f( gl.getUniformLocation(program, "cx"), cx);
     gl.uniform1f( gl.getUniformLocation(program, "cy"), cy);
+    gl.uniform1i(gl.getUniformLocation(program,'res'),(resVal));
 
     canvas.onmousedown = function(event){
         prevX = ((event.x - event.target.getBoundingClientRect().left) - canvas.width/2)/(canvas.width/2);
@@ -75,9 +77,13 @@ onload = function init() {
         currX = ((event.x - event.target.getBoundingClientRect().left) - canvas.width/2)/(canvas.width/2);
         currY = (canvas.height/2 - (event.y - event.target.getBoundingClientRect().top))/(canvas.height/2);
     }
+
     window.addEventListener('wheel',function(event){
         scale += 0.15 * scale * (event.deltaY/Math.abs(event.deltaY));
+        console.log(resVal)
+        resVal += 2*(event.deltaY/Math.abs(event.deltaY));
         gl.uniform1f(gl.getUniformLocation(program,"scale"),scale);
+        gl.uniform1i(gl.getUniformLocation(program,'res'),(resVal));
     }, false);
     gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
 
