@@ -1,0 +1,22 @@
+html {
+    display: table;
+    margin: auto;
+    background: url("textures/frac_texture.jpg");
+}
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
+canvas {
+    border: saddlebrown ridge 5px;
+    background: blue;
+}
+.info{
+    text-align: center;
+    border: saddlebrown ridge 5px;
+    color: white;
+    font-style: unset;
+    font-family: "Times New Roman", sans-serif;
+    font-size: 35px;
+    background: url("textures/frac2_texture.jpg");
+}
