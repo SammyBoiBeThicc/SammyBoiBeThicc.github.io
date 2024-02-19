@@ -1,7 +1,7 @@
 html {
     display: table;
     margin: auto;
-    background: url("textures/frac_texture.jpg");
+    background: url("textures/image_2024-02-18_232425898.png");
 }
 body {
     display: table-cell;
@@ -18,5 +18,5 @@ canvas {
     font-style: unset;
     font-family: "Times New Roman", sans-serif;
     font-size: 35px;
-    background: url("textures/frac2_texture.jpg");
+    background: url("textures/image_2024-02-18_232425898.png");
 }
